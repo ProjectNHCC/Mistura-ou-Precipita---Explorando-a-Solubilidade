@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistura ou Precipita? - Explorando a Solubilidade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'science-blue': '#2E86AB',
+                        'lab-green': '#A23B72',
+                        'crystal-blue': '#F18F01',
+                        'solution-teal': '#0EA5E9',
+                        'beaker-gray': '#F1F5F9'
+                    },
+                    animation: {
+                        'dissolve': 'dissolve 2s ease-in-out',
+                        'precipitate': 'precipitate 2s ease-in-out',
+                        'bubble': 'bubble 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes dissolve {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+        
+        @keyframes precipitate {
+            0% { transform: translateY(-20px); opacity: 0; }
+            50% { transform: translateY(10px); opacity: 0.7; }
+            100% { transform: translateY(30px); opacity: 1; }
+        }
+        
+        @keyframes bubble {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .beaker {
+            background: linear-gradient(to bottom, transparent 20%, rgba(14, 165, 233, 0.3) 20%, rgba(14, 165, 233, 0.6) 100%);
+            border: 3px solid #64748B;
+            border-radius: 0 0 50px 50px;
+        }
+        
+        .molecule {
+            width: 8px;
+            height: 8px;
+            background: #F59E0B;
+            border-radius: 50%;
+            position: absolute;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .precipitate-particle {
+            width: 6px;
+            height: 6px;
+            background: #EF4444;
+            border-radius: 50%;
+            position: absolute;
+            animation: precipitate 2s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-science-blue to-solution-teal text-white shadow-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-science-blue font-bold">⚗️</span>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-bold">Mistura ou Precipita?</h1>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            <ul id="nav-menu" class="hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 mt-4 md:mt-0 text-sm">
+                <li><a href="#introducao" class="hover:text-crystal-blue transition-colors">Introdução</a></li>
+                <li><a href="#historia" class="hover:text-crystal-blue transition-colors">História</a></li>
+                <li><a href="#aplicacoes" class="hover:text-crystal-blue transition-colors">Aplicações</a></li>
+                <li><a href="#jogo" class="hover:text-crystal-blue transition-colors">Jogo</a></li>
+                <li><a href="#experimentos" class="hover:text-crystal-blue transition-colors">Experimentos</a></li>
+                <li><a href="#exercicios" class="hover:text-crystal-blue transition-colors">Exercícios</a></li>
+                <li><a href="#conexoes" class="hover:text-crystal-blue transition-colors">Conexões</a></li>
+                <li><a href="#curiosidades" class="hover:text-crystal-blue transition-colors">Curiosidades</a></li>
+                <li><a href="#contato" class="hover:text-crystal-blue transition-colors">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-blue-50 to-teal-50 dark:from-gray-800 dark:to-gray-900 py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6 text-science-blue dark:text-blue-400">
+                Explorando a Solubilidade
+            </h2>
+            <p class="text-xl md:text-2xl mb-8 text-gray-600 dark:text-gray-300">
+                Descubra o fascinante mundo das reações químicas e precipitação
+            </p>
+            <div class="flex justify-center mb-8">
+                <div class="beaker w-24 h-32 relative mx-4">
+                    <div class="molecule" style="top: 30%; left: 20%; animation-delay: 0s;"></div>
+                    <div class="molecule" style="top: 50%; left: 60%; animation-delay: 1s;"></div>
+                    <div class="molecule" style="top: 70%; left: 40%; animation-delay: 2s;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introdução -->
+    <section id="introducao" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center text-science-blue dark:text-blue-400">
+                Introdução à Solubilidade
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">O que é Solubilidade?</h3>
+                    <p class="text-lg mb-6 leading-relaxed">
+                        A solubilidade é a capacidade de uma substância (soluto) se dissolver em outra (solvente), 
+                        formando uma mistura homogênea chamada solução. É uma propriedade fundamental que determina 
+                        se duas substâncias irão se misturar completamente ou formar um precipitado.
+                    </p>
+                    
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200">Fatores que Influenciam:</h4>
+                    <ul class="space-y-2 text-lg">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">🌡️</span> <strong>Temperatura:</strong> Geralmente aumenta a solubilidade</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">⏬</span> <strong>Pressão:</strong> Importante para gases</li>
+                        <li class="flex items-center"><span class="text-purple-500 mr-2">🧪</span> <strong>Tipo de solvente:</strong> "Semelhante dissolve semelhante"</li>
+                        <li class="flex items-center"><span class="text-orange-500 mr-2">⚛️</span> <strong>Natureza química:</strong> Polaridade e forças intermoleculares</li>
+                    </ul>
+                </div>
+                <div class="bg-gradient-to-br from-blue-100 to-teal-100 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl">
+                    <h4 class="text-xl font-semibold mb-4 text-center">Regras Gerais de Solubilidade</h4>
+                    <div class="space-y-3 text-base">
+                        <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
+                            <strong class="text-green-700 dark:text-green-300">Solúveis:</strong> Nitratos (NO₃⁻), Acetatos (CH₃COO⁻)
+                        </div>
+                        <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                            <strong class="text-blue-700 dark:text-blue-300">Grupo I:</strong> Li⁺, Na⁺, K⁺ (sempre solúveis)
+                        </div>
+                        <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
+                            <strong class="text-red-700 dark:text-red-300">Insolúveis:</strong> Carbonatos, Fosfatos (exceto Grupo I)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- História -->
+    <section id="historia" class="py-16 bg-beaker-gray dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-science-blue dark:text-blue-400">
+                Contexto Histórico
+            </h2>
+            
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-science-blue"></div>
+                
+                <div class="space-y-12">
+                    <div class="flex items-center md:justify-start justify-center">
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg max-w-md ml-8 md:ml-16">
+                            <div class="text-science-blue font-bold text-lg mb-2">Século XVI</div>
+                            <h4 class="font-semibold mb-2">Alquimia e Primeiras Descobertas</h4>
+                            <p>Os alquimistas começaram a estudar a dissolução de metais em ácidos, estabelecendo as bases para o entendimento da solubilidade.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center md:justify-end justify-center">
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg max-w-md mr-8 md:mr-16">
+                            <div class="text-science-blue font-bold text-lg mb-2">1803</div>
+                            <h4 class="font-semibold mb-2">Lei das Proporções Definidas</h4>
+                            <p>Joseph Proust estabeleceu princípios que ajudaram a compreender a formação de precipitados em proporções fixas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center md:justify-start justify-center">
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg max-w-md ml-8 md:ml-16">
+                            <div class="text-science-blue font-bold text-lg mb-2">1850-1900</div>
+                            <h4 class="font-semibold mb-2">Desenvolvimento das Tabelas</h4>
+                            <p>Químicos como Mendeleev sistematizaram dados de solubilidade, criando as primeiras tabelas organizadas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center md:justify-end justify-center">
+                        <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg max-w-md mr-8 md:mr-16">
+                            <div class="text-science-blue font-bold text-lg mb-2">Século XX-XXI</div>
+                            <h4 class="font-semibold mb-2">Engenharia Química Moderna</h4>
+                            <p>Avanços em separação de fases e purificação industrial baseados nos princípios de solubilidade.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-gradient-to-r from-blue-100 to-teal-100 dark:from-gray-700 dark:to-gray-600 p-6 rounded-xl">
+                <blockquote class="text-center text-lg italic">
+                    "A química é a ciência da transformação. Compreender a solubilidade é compreender como a matéria se reorganiza no nível molecular."
+                    <footer class="mt-2 text-science-blue dark:text-blue-400 font-semibold">- Jöns Jacob Berzelius</footer>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aplicações Práticas -->
+    <section id="aplicacoes" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-science-blue dark:text-blue-400">
+                Aplicações Práticas
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 p-6 rounded-xl text-center hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">💊</div>
+                    <h3 class="text-xl font-semibold mb-3 text-green-800 dark:text-green-200">Indústria Farmacêutica</h3>
+                    <p class="text-green-700 dark:text-green-300">
+                        Desenvolvimento de medicamentos com solubilidade otimizada para melhor absorção no organismo.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 p-6 rounded-xl text-center hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">💧</div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-800 dark:text-blue-200">Tratamento de Água</h3>
+                    <p class="text-blue-700 dark:text-blue-300">
+                        Remoção de contaminantes através de precipitação controlada e processos de purificação.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 p-6 rounded-xl text-center hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">⛰️</div>
+                    <h3 class="text-xl font-semibold mb-3 text-purple-800 dark:text-purple-200">Geologia</h3>
+                    <p class="text-purple-700 dark:text-purple-300">
+                        Formação de minerais e rochas sedimentares através de processos de precipitação natural.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800 p-6 rounded-xl text-center hover:scale-105 transition-transform">
+                    <div class="text-4xl mb-4">🏠</div>
+                    <h3 class="text-xl font-semibold mb-3 text-orange-800 dark:text-orange-200">Cotidiano</h3>
+                    <p class="text-orange-700 dark:text-orange-300">
+                        Preparo de soluções caseiras, limpeza, cozinha e produtos de higiene pessoal.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jogo Interativo -->
+    <section id="jogo" class="py-16 bg-gradient-to-br from-beaker-gray to-blue-50 dark:from-gray-800 dark:to-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center text-science-blue dark:text-blue-400">
+                Jogo: Mistura ou Precipita?
+            </h2>
+            
+            <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Painel de Controle -->
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-6 text-center">Laboratório Virtual</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Reagente 1:</label>
+                                <select id="reagente1" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="">Selecione um reagente</option>
+                                    <option value="NaCl">Cloreto de Sódio (NaCl)</option>
+                                    <option value="AgNO3">Nitrato de Prata (AgNO₃)</option>
+                                    <option value="CaCl2">Cloreto de Cálcio (CaCl₂)</option>
+                                    <option value="Na2SO4">Sulfato de Sódio (Na₂SO₄)</option>
+                                    <option value="BaCl2">Cloreto de Bário (BaCl₂)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Reagente 2:</label>
+                                <select id="reagente2" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="">Selecione um reagente</option>
+                                    <option value="NaCl">Cloreto de Sódio (NaCl)</option>
+                                    <option value="AgNO3">Nitrato de Prata (AgNO₃)</option>
+                                    <option value="CaCl2">Cloreto de Cálcio (CaCl₂)</option>
+                                    <option value="Na2SO4">Sulfato de Sódio (Na₂SO₄)</option>
+                                    <option value="BaCl2">Cloreto de Bário (BaCl₂)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Solvente:</label>
+                                <select id="solvente" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-base">
+                                    <option value="agua">Água (H₂O)</option>
+                                    <option value="etanol">Etanol (C₂H₅OH)</option>
+                                </select>
+                            </div>
+                            
+                            <button id="misturar" class="w-full bg-science-blue hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors text-base">
+                                🧪 Misturar Reagentes
+                            </button>
+                            
+                            <div id="predicao" class="hidden">
+                                <label class="block text-sm font-medium mb-2">Sua predição:</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <button id="pred-dissolve" class="p-3 border-2 border-green-500 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-100 dark:hover:bg-green-900 transition-colors text-base">
+                                        ✅ Dissolve
+                                    </button>
+                                    <button id="pred-precipita" class="p-3 border-2 border-red-500 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-100 dark:hover:bg-red-900 transition-colors text-base">
+                                        ❌ Precipita
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button id="tabela-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors text-base">
+                                📊 Consultar Tabela de Solubilidade
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <div class="text-lg font-semibold">Pontuação: <span id="pontos" class="text-science-blue">0</span></div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Acertos: <span id="acertos">0</span> | Erros: <span id="erros">0</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Béquer Virtual -->
+                    <div class="text-center">
+                        <h3 class="text-2xl font-semibold mb-6">Béquer Virtual</h3>
+                        <div class="relative mx-auto" style="width: 200px; height: 300px;">
+                            <div id="bequer" class="beaker w-full h-full relative overflow-hidden">
+                                <div id="animacao-container" class="absolute inset-0"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="resultado" class="mt-6 p-4 rounded-lg hidden">
+                            <div id="feedback" class="text-lg font-semibold mb-2"></div>
+                            <div id="explicacao" class="text-sm"></div>
+                            <div id="equacao" class="mt-2 font-mono text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabela de Solubilidade -->
+                <div id="tabela-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-96 overflow-auto">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-bold">Tabela de Solubilidade</h3>
+                                <button id="fechar-tabela" class="text-gray-500 hover:text-gray-700 text-xl">×</button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm border-collapse border border-gray-300 dark:border-gray-600">
+                                    <thead>
+                                        <tr class="bg-gray-100 dark:bg-gray-700">
+                                            <th class="border border-gray-300 dark:border-gray-600 p-2">Íon</th>
+                                            <th class="border border-gray-300 dark:border-gray-600 p-2">Cl⁻</th>
+                                            <th class="border border-gray-300 dark:border-gray-600 p-2">NO₃⁻</th>
+                                            <th class="border border-gray-300 dark:border-gray-600 p-2">SO₄²⁻</th>
+                                            <th class="border border-gray-300 dark:border-gray-600 p-2">CO₃²⁻</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 font-semibold">Na⁺</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 font-semibold">Ag⁺</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 font-semibold">Ca²⁺</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-yellow-600">PS</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 font-semibold">Ba²⁺</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-green-600">S</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                            <td class="border border-gray-300 dark:border-gray-600 p-2 text-red-600">I</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                    S = Solúvel | I = Insolúvel | PS = Pouco Solúvel
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experimentos -->
+    <section id="experimentos" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-science-blue dark:text-blue-400">
+                Experimentos Práticos
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gradient-to-br from-blue-50 to-teal-50 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl">
+                    <h3 class="text-xl font-semibold mb-4 text-science-blue dark:text-blue-400">
+                        🧪 Experimento 1: Precipitação de Cloreto de Prata
+                    </h3>
+                    
+                    <h4 class="font-semibold mb-2">Materiais:</h4>
+                    <ul class="text-sm mb-4 space-y-1">
+                        <li>• Solução de nitrato de prata (AgNO₃) 0,1 M</li>
+                        <li>• Solução de cloreto de sódio (NaCl) 0,1 M</li>
+                        <li>• 2 béqueres de 100 mL</li>
+                        <li>• Bastão de vidro</li>
+                        <li>• Papel de filtro</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mb-2">Procedimento:</h4>
+                    <ol class="text-sm mb-4 space-y-1">
+                        <li>1. Adicione 50 mL de solução de NaCl em um béquer</li>
+                        <li>2. Lentamente, adicione 50 mL de solução de AgNO₃</li>
+                        <li>3. Observe a formação do precipitado branco</li>
+                        <li>4. Mexa suavemente com o bastão de vidro</li>
+                        <li>5. Filtre e observe o resíduo sólido</li>
+                    </ol>
+                    
+                    <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
+                        <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-1">⚠️ Segurança:</h4>
+                        <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                            Use óculos de proteção e luvas. AgNO₃ pode manchar a pele.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 p-6 rounded-xl">
+                    <h3 class="text-xl font-semibold mb-4 text-science-blue dark:text-blue-400">
+                        🌡️ Experimento 2: Efeito da Temperatura
+                    </h3>
+                    
+                    <h4 class="font-semibold mb-2">Materiais:</h4>
+                    <ul class="text-sm mb-4 space-y-1">
+                        <li>• Sal de cozinha (NaCl)</li>
+                        <li>• Água destilada</li>
+                        <li>• 3 béqueres de 250 mL</li>
+                        <li>• Termômetro</li>
+                        <li>• Fonte de aquecimento</li>
+                        <li>• Balança</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mb-2">Procedimento:</h4>
+                    <ol class="text-sm mb-4 space-y-1">
+                        <li>1. Prepare três amostras de 100 mL de água a diferentes temperaturas: 10°C, 25°C e 60°C</li>
+                        <li>2. Adicione sal gradualmente até a saturação</li>
+                        <li>3. Anote a quantidade de sal dissolvida em cada temperatura</li>
+                        <li>4. Compare os resultados e faça um gráfico</li>
+                    </ol>
+                    
+                    <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-1">📊 Resultado Esperado:</h4>
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            A solubilidade do NaCl aumenta ligeiramente com a temperatura.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exercícios -->
+    <section id="exercicios" class="py-16 bg-beaker-gray dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-science-blue dark:text-blue-400">
+                Exercícios e Questionários
+            </h2>
+            
+            <div class="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl p-8">
+                <div id="quiz-container">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold">Questão <span id="questao-num">1</span> de 5</h3>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                                Pontuação: <span id="quiz-pontos">0</span>/5
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+                            <div id="progresso" class="bg-science-blue h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="questao-container">
+                        <div class="questao" id="q1">
+                            <h4 class="text-lg font-semibold mb-4">
+                                Qual dos seguintes compostos é SEMPRE solúvel em água?
+                            </h4>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                                    <input type="radio" name="q1" value="a" class="mr-3">
+                                    <span>Carbonato de cálcio (CaCO₃)</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                                    <input type="radio" name="q1" value="b" class="mr-3">
+                                    <span>Nitrato de potássio (KNO₃)</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                                    <input type="radio" name="q1" value="c" class="mr-3">
+                                    <span>Sulfato de bário (BaSO₄)</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                                    <input type="radio" name="q1" value="d" class="mr-3">
+                                    <span>Cloreto de prata (AgCl)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-between">
+                        <button id="anterior" class="px-6 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors disabled:opacity-50" disabled>
+                            Anterior
+                        </button>
+                        <button id="proximo" class="px-6 py-2 bg-science-blue hover:bg-blue-600 text-white rounded-lg transition-colors">
+                            Próxima
+                        </button>
+                    </div>
+                    
+                    <div id="feedback-quiz" class="mt-4 p-4 rounded-lg hidden"></div>
+                </div>
+                
+                <div id="resultado-final" class="hidden text-center">
+                    <h3 class="text-2xl font-bold mb-4">Quiz Finalizado!</h3>
+                    <div class="text-6xl mb-4" id="emoji-resultado">🎉</div>
+                    <div class="text-xl mb-4">
+                        Você acertou <span id="acertos-finais">0</span> de 5 questões!
+                    </div>
+                    <div class="text-lg mb-6" id="mensagem-final"></div>
+                    <button id="reiniciar-quiz" class="bg-science-blue hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        Fazer Quiz Novamente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conexões Interdisciplinares -->
+    <section id="conexoes" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-science-blue dark:text-blue-400">
+                Conexões Interdisciplinares
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 p-6 rounded-xl">
+                    <div class="text-4xl mb-4 text-center">🧬</div>
+                    <h3 class="text-xl font-semibold mb-4 text-green-800 dark:text-green-200 text-center">Biologia</h3>
+                    <ul class="space-y-2 text-green-700 dark:text-green-300">
+                        <li>• Absorção de nutrientes no intestino</li>
+                        <li>• Transporte de medicamentos no sangue</li>
+                        <li>• Processos de excreção renal</li>
+                        <li>• Fotossíntese e transporte de íons</li>
+                        <li>• Equilíbrio de eletrólitos celulares</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 p-6 rounded-xl">
+                    <div class="text-4xl mb-4 text-center">🌍</div>
+                    <h3 class="text-xl font-semibold mb-4 text-blue-800 dark:text-blue-200 text-center">Geografia/Geologia</h3>
+                    <ul class="space-y-2 text-blue-700 dark:text-blue-300">
+                        <li>• Formação de rochas sedimentares</li>
+                        <li>• Processo de intemperismo químico</li>
+                        <li>• Formação de estalactites e estalagmites</li>
+                        <li>• Qualidade da água em aquíferos</li>
+                        <li>• Cristalização de minerais</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 p-6 rounded-xl">
+                    <div class="text-4xl mb-4 text-center">⚙️</div>
+                    <h3 class="text-xl font-semibold mb-4 text-purple-800 dark:text-purple-200 text-center">Engenharia</h3>
+                    <ul class="space-y-2 text-purple-700 dark:text-purple-300">
+                        <li>• Tratamento de águas residuais</li>
+                        <li>• Processos de separação industrial</li>
+                        <li>• Cristalização controlada</li>
+                        <li>• Purificação de compostos químicos</li>
+                        <li>• Prevenção de incrustações</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curiosidades -->
+    <section id="curiosidades" class="py-16 bg-gradient-to-br from-beaker-gray to-blue-50 dark:from-gray-800 dark:to-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-science-blue dark:text-blue-400">
+                Curiosidades e Avanços Recentes
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                    <div class="text-3xl mb-4">💧</div>
+                    <h3 class="text-lg font-semibold mb-3">Água Ultrapura</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        A água mais pura já produzida tem resistividade de 18,2 MΩ·cm e é usada na fabricação de semicondutores.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                    <div class="text-3xl mb-4">🧊</div>
+                    <h3 class="text-lg font-semibold mb-3">Gelo que Não Derrete</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Pesquisadores descobriram formas de gelo que permanecem sólidas a temperaturas superiores a 100°C.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                    <div class="text-3xl mb-4">⚡</div>
+                    <h3 class="text-lg font-semibold mb-3">Super-solventes</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Líquidos iônicos podem dissolver celulose e outros materiais considerados "insolúveis".
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                    <div class="text-3xl mb-4">🔬</div>
+                    <h3 class="text-lg font-semibold mb-3">Nanoprecipitação</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Controle de precipitação em escala nanométrica permite criar materiais com propriedades únicas.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                    <div class="text-3xl mb-4">🌊</div>
+                    <h3 class="text-lg font-semibold mb-3">Dessalinização Verde</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Novas técnicas de precipitação seletiva tornam a dessalinização mais eficiente e sustentável.
+                    </p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:scale-105 transition-transform">
+                    <div class="text-3xl mb-4">💊</div>
+                    <h3 class="text-lg font-semibold mb-3">Medicamentos Solúveis</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Nanotecnologia permite criar versões solúveis de medicamentos antes insolúveis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-gray-800 dark:bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Equipe de Desenvolvimento</h3>
+                    <p class="text-gray-300 mb-2">Projeto Educacional</p>
+                    <p class="text-gray-300 mb-2">Química Interativa</p>
+                    <p class="text-gray-300">Versão 1.0 - 2024</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Referências</h3>
+                    <ul class="space-y-2 text-gray-300 text-sm">
+                        <li>• Atkins, P. W. - Princípios de Química</li>
+                        <li>• Brown, T. L. - Química Geral</li>
+                        <li>• Chang, R. - Química Geral</li>
+                        <li>• IUPAC Solubility Guidelines</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Recursos Adicionais</h3>
+                    <ul class="space-y-2 text-gray-300 text-sm">
+                        <li>• <a href="#" class="hover:text-blue-400">Simuladores Online</a></li>
+                        <li>• <a href="#" class="hover:text-blue-400">Vídeos Educativos</a></li>
+                        <li>• <a href="#" class="hover:text-blue-400">Artigos Científicos</a></li>
+                        <li>• <a href="#" class="hover:text-blue-400">Material Complementar</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                        © 2024 Mistura ou Precipita? - Todos os direitos reservados.
+                    </p>
+                    <div class="flex space-x-4">
+                        <button class="text-gray-400 hover:text-white transition-colors">
+                            📧 Contato
+                        </button>
+                        <button class="text-gray-400 hover:text-white transition-colors">
+                            💬 Feedback
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    navMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // Jogo de Solubilidade
+        let pontos = 0;
+        let acertos = 0;
+        let erros = 0;
+        let experimento = null;
+
+        const reagentes = {
+            'NaCl': { nome: 'Cloreto de Sódio', cation: 'Na+', anion: 'Cl-' },
+            'AgNO3': { nome: 'Nitrato de Prata', cation: 'Ag+', anion: 'NO3-' },
+            'CaCl2': { nome: 'Cloreto de Cálcio', cation: 'Ca2+', anion: 'Cl-' },
+            'Na2SO4': { nome: 'Sulfato de Sódio', cation: 'Na+', anion: 'SO4-2' },
+            'BaCl2': { nome: 'Cloreto de Bário', cation: 'Ba2+', anion: 'Cl-' }
+        };
+
+        const regras = {
+            'Ag+Cl-': { solubilidade: false, produto: 'AgCl', cor: 'branco' },
+            'Ba2+SO4-2': { solubilidade: false, produto: 'BaSO4', cor: 'branco' },
+            'Ca2+SO4-2': { solubilidade: false, produto: 'CaSO4', cor: 'branco' }
+        };
+
+        document.getElementById('misturar').addEventListener('click', () => {
+            const reagente1 = document.getElementById('reagente1').value;
+            const reagente2 = document.getElementById('reagente2').value;
+            const solvente = document.getElementById('solvente').value;
+
+            if (!reagente1 || !reagente2) {
+                alert('Selecione ambos os reagentes!');
+                return;
+            }
+
+            if (reagente1 === reagente2) {
+                alert('Selecione reagentes diferentes!');
+                return;
+            }
+
+            experimento = {
+                reagente1,
+                reagente2,
+                solvente,
+                cations: [reagentes[reagente1].cation, reagentes[reagente2].cation],
+                anions: [reagentes[reagente1].anion, reagentes[reagente2].anion]
+            };
+
+            // Mostrar animação de mistura
+            animarMistura();
+            
+            // Mostrar área de predição
+            document.getElementById('predicao').classList.remove('hidden');
+            document.getElementById('resultado').classList.add('hidden');
+        });
+
+        function animarMistura() {
+            const container = document.getElementById('animacao-container');
+            container.innerHTML = '';
+            
+            // Adicionar moléculas animadas
+            for (let i = 0; i < 6; i++) {
+                const molecula = document.createElement('div');
+                molecula.className = 'molecule';
+                molecula.style.left = Math.random() * 80 + 10 + '%';
+                molecula.style.top = Math.random() * 60 + 20 + '%';
+                molecula.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(molecula);
+            }
+        }
+
+        document.getElementById('pred-dissolve').addEventListener('click', () => {
+            verificarResposta(true);
+        });
+
+        document.getElementById('pred-precipita').addEventListener('click', () => {
+            verificarResposta(false);
+        });
+
+        function verificarResposta(predicao) {
+            if (!experimento) return;
+
+            const resultado = calcularSolubilidade();
+            const correto = (predicao && resultado.dissolve) || (!predicao && !resultado.dissolve);
+            
+            if (correto) {
+                acertos++;
+                pontos += 10;
+                mostrarFeedback(true, resultado);
+            } else {
+                erros++;
+                mostrarFeedback(false, resultado);
+            }
+
+            atualizarPontuacao();
+            
+            // Reset para próximo experimento
+            setTimeout(() => {
+                document.getElementById('reagente1').selectedIndex = 0;
+                document.getElementById('reagente2').selectedIndex = 0;
+                document.getElementById('predicao').classList.add('hidden');
+                document.getElementById('resultado').classList.add('hidden');
+                document.getElementById('animacao-container').innerHTML = '';
+                experimento = null;
+            }, 5000);
+        }
+
+        function calcularSolubilidade() {
+            const cations = experimento.cations;
+            const anions = experimento.anions;
+            
+            // Verificar todas as combinações possíveis
+            for (let cation of cations) {
+                for (let anion of anions) {
+                    const chave = cation + anion;
+                    if (regras[chave]) {
+                        return {
+                            dissolve: false,
+                            precipitado: regras[chave].produto,
+                            cor: regras[chave].cor,
+                            explicacao: `Forma precipitado de ${regras[chave].produto} (${regras[chave].cor})`
+                        };
+                    }
+                }
+            }
+            
+            return {
+                dissolve: true,
+                explicacao: 'Todos os produtos são solúveis em água'
+            };
+        }
+
+        function mostrarFeedback(correto, resultado) {
+            const feedbackDiv = document.getElementById('feedback');
+            const explicacaoDiv = document.getElementById('explicacao');
+            const equacaoDiv = document.getElementById('equacao');
+            const resultadoDiv = document.getElementById('resultado');
+
+            if (correto) {
+                feedbackDiv.textContent = '✅ Correto!';
+                feedbackDiv.className = 'text-lg font-semibold mb-2 text-green-600';
+                resultadoDiv.className = 'mt-6 p-4 rounded-lg bg-green-100 dark:bg-green-900';
+            } else {
+                feedbackDiv.textContent = '❌ Incorreto!';
+                feedbackDiv.className = 'text-lg font-semibold mb-2 text-red-600';
+                resultadoDiv.className = 'mt-6 p-4 rounded-lg bg-red-100 dark:bg-red-900';
+            }
+
+            explicacaoDiv.textContent = resultado.explicacao;
+            
+            if (!resultado.dissolve) {
+                equacaoDiv.textContent = `${experimento.reagente1} + ${experimento.reagente2} → ${resultado.precipitado} ↓ + outros produtos`;
+                animarPrecipitacao();
+            } else {
+                equacaoDiv.textContent = 'Solução homogênea formada';
+                animarDissolucao();
+            }
+
+            resultadoDiv.classList.remove('hidden');
+        }
+
+        function animarPrecipitacao() {
+            const container = document.getElementById('animacao-container');
+            
+            for (let i = 0; i < 8; i++) {
+                const particula = document.createElement('div');
+                particula.className = 'precipitate-particle';
+                particula.style.left = Math.random() * 70 + 15 + '%';
+                particula.style.top = '20%';
+                particula.style.animationDelay = Math.random() * 1 + 's';
+                container.appendChild(particula);
+            }
+        }
+
+        function animarDissolucao() {
+            const moleculas = document.querySelectorAll('.molecule');
+            moleculas.forEach(mol => {
+                mol.style.animation = 'dissolve 2s ease-in-out forwards';
+            });
+        }
+
+        function atualizarPontuacao() {
+            document.getElementById('pontos').textContent = pontos;
+            document.getElementById('acertos').textContent = acertos;
+            document.getElementById('erros').textContent = erros;
+        }
+
+        // Tabela de solubilidade modal
+        document.getElementById('tabela-btn').addEventListener('click', () => {
+            document.getElementById('tabela-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('fechar-tabela').addEventListener('click', () => {
+            document.getElementById('tabela-modal').classList.add('hidden');
+        });
+
+        // Quiz System
+        const quizData = [
+            {
+                pergunta: "Qual dos seguintes compostos é SEMPRE solúvel em água?",
+                opcoes: [
+                    "Carbonato de cálcio (CaCO₃)",
+                    "Nitrato de potássio (KNO₃)",
+                    "Sulfato de bário (BaSO₄)",
+                    "Cloreto de prata (AgCl)"
+                ],
+                resposta: 1,
+                explicacao: "Todos os nitratos são solúveis em água, incluindo o KNO₃."
+            },
+            {
+                pergunta: "O que acontece quando a temperatura aumenta para a maioria dos sólidos?",
+                opcoes: [
+                    "A solubilidade diminui",
+                    "A solubilidade aumenta",
+                    "A solubilidade não muda",
+                    "O sólido sempre precipita"
+                ],
+                resposta: 1,
+                explicacao: "Para a maioria dos sólidos, o aumento da temperatura aumenta a solubilidade."
+            },
+            {
+                pergunta: "Qual é o principal fator que determina se AgCl precipita?",
+                opcoes: [
+                    "Temperatura apenas",
+                    "Pressão apenas",
+                    "Concentração dos íons Ag⁺ e Cl⁻",
+                    "pH da solução"
+                ],
+                resposta: 2,
+                explicacao: "AgCl é pouco solúvel, então precipita quando há concentração suficiente de Ag⁺ e Cl⁻."
+            },
+            {
+                pergunta: "Em qual situação ocorre precipitação?",
+                opcoes: [
+                    "Quando o produto de solubilidade é excedido",
+                    "Quando a temperatura aumenta",
+                    "Quando o pH é neutro",
+                    "Quando há agitação"
+                ],
+                resposta: 0,
+                explicacao: "Precipitação ocorre quando o produto de solubilidade (Kps) é excedido."
+            },
+            {
+                pergunta: "Qual solvente é melhor para dissolver compostos iônicos?",
+                opcoes: [
+                    "Benzeno",
+                    "Hexano",
+                    "Água",
+                    "Óleo"
+                ],
+                resposta: 2,
+                explicacao: "Água é polar e dissolve bem compostos iônicos devido às interações íon-dipolo."
+            }
+        ];
+
+        let quizAtual = 0;
+        let pontosQuiz = 0;
+        let respostasQuiz = [];
+
+        function carregarQuestao() {
+            const questao = quizData[quizAtual];
+            document.getElementById('questao-num').textContent = quizAtual + 1;
+            
+            const container = document.getElementById('questao-container');
+            container.innerHTML = `
+                <div class="questao">
+                    <h4 class="text-lg font-semibold mb-4">${questao.pergunta}</h4>
+                    <div class="space-y-3">
+                        ${questao.opcoes.map((opcao, index) => `
+                            <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
+                                <input type="radio" name="questao" value="${index}" class="mr-3 text-base">
+                                <span>${opcao}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Atualizar barra de progresso
+            const progresso = ((quizAtual + 1) / quizData.length) * 100;
+            document.getElementById('progresso').style.width = progresso + '%';
+            
+            // Atualizar botões
+            document.getElementById('anterior').disabled = quizAtual === 0;
+            document.getElementById('proximo').textContent = quizAtual === quizData.length - 1 ? 'Finalizar' : 'Próxima';
+        }
+
+        document.getElementById('proximo').addEventListener('click', () => {
+            const resposta = document.querySelector('input[name="questao"]:checked');
+            
+            if (!resposta) {
+                alert('Selecione uma resposta!');
+                return;
+            }
+            
+            const respostaNum = parseInt(resposta.value);
+            const questao = quizData[quizAtual];
+            const correto = respostaNum === questao.resposta;
+            
+            respostasQuiz[quizAtual] = {
+                resposta: respostaNum,
+                correto: correto
+            };
+            
+            if (correto) {
+                pontosQuiz++;
+            }
+            
+            // Mostrar feedback
+            mostrarFeedbackQuiz(correto, questao.explicacao);
+            
+            setTimeout(() => {
+                if (quizAtual < quizData.length - 1) {
+                    quizAtual++;
+                    carregarQuestao();
+                    document.getElementById('feedback-quiz').classList.add('hidden');
+                } else {
+                    finalizarQuiz();
+                }
+            }, 2000);
+        });
+
+        document.getElementById('anterior').addEventListener('click', () => {
+            if (quizAtual > 0) {
+                quizAtual--;
+                carregarQuestao();
+                document.getElementById('feedback-quiz').classList.add('hidden');
+            }
+        });
+
+        function mostrarFeedbackQuiz(correto, explicacao) {
+            const feedback = document.getElementById('feedback-quiz');
+            
+            if (correto) {
+                feedback.className = 'mt-4 p-4 rounded-lg bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
+                feedback.innerHTML = `<strong>✅ Correto!</strong><br>${explicacao}`;
+            } else {
+                feedback.className = 'mt-4 p-4 rounded-lg bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
+                feedback.innerHTML = `<strong>❌ Incorreto!</strong><br>${explicacao}`;
+            }
+            
+            feedback.classList.remove('hidden');
+        }
+
+        function finalizarQuiz() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('resultado-final').classList.remove('hidden');
+            
+            document.getElementById('acertos-finais').textContent = pontosQuiz;
+            document.getElementById('quiz-pontos').textContent = pontosQuiz;
+            
+            let emoji, mensagem;
+            const percentual = (pontosQuiz / quizData.length) * 100;
+            
+            if (percentual >= 80) {
+                emoji = '🎉';
+                mensagem = 'Excelente! Você domina bem os conceitos de solubilidade!';
+            } else if (percentual >= 60) {
+                emoji = '👏';
+                mensagem = 'Bom trabalho! Continue estudando para aprimorar seus conhecimentos.';
+            } else {
+                emoji = '📚';
+                mensagem = 'Continue estudando! Revise os conceitos e tente novamente.';
+            }
+            
+            document.getElementById('emoji-resultado').textContent = emoji;
+            document.getElementById('mensagem-final').textContent = mensagem;
+        }
+
+        document.getElementById('reiniciar-quiz').addEventListener('click', () => {
+            quizAtual = 0;
+            pontosQuiz = 0;
+            respostasQuiz = [];
+            
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('resultado-final').classList.add('hidden');
+            document.getElementById('feedback-quiz').classList.add('hidden');
+            
+            carregarQuestao();
+        });
+
+        // Inicializar quiz
+        carregarQuestao();
+
+        // Adicionar efeitos de animação quando elementos entram na viewport
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.grid > div, .space-y-12 > div');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Inicializar animações
+        document.addEventListener('DOMContentLoaded', animateOnScroll);
+    </script>
+</body>
+</html>
